@@ -1,0 +1,103 @@
+html {
+  font-size: 12px;
+}
+
+main {
+  text-align: center;
+}
+
+.hide {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  pointer-events: none;
+  opacity: 0.1;
+}
+
+#game-grid {
+  margin: 0 auto 0 auto;
+  width: 40%;
+  max-width: 800px;
+  border: 1px black inset;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+@media only screen and (min-width: 300px) {
+  #game-grid {
+    width: 100%;
+    font-size: 0.7em;
+    max-width: 800px;
+  }
+}
+@media only screen and (min-width: 1025px) {
+  #game-grid {
+    width: 40%;
+    max-width: 800px;
+  }
+}
+
+#word-container, #score-container {
+  min-height: 3rem;
+  font-size: 3em;
+  padding: 0px;
+  margin: 0px;
+}
+
+.tile-container {
+  width: 20%;
+  transition: all 0.3s;
+  border-radius: 1em;
+}
+
+.tile-selected .tile {
+  border: 5px #300 inset;
+}
+
+.tile {
+  border: 1px solid black;
+  border-radius: 0.1em;
+  padding: 0px;
+  margin: 0px;
+  position: relative;
+  font-size: 5em;
+  height: 1.5em;
+  pointer-events: none;
+}
+.tile .letter {
+  font-size: 1em;
+  position: relative;
+  position: absolute;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  pointer-events: none;
+}
+@media only screen and (min-width: 300px) {
+  .tile .letter {
+    top: 0.25em;
+    left: 0.6em;
+  }
+}
+@media only screen and (min-width: 1025px) {
+  .tile .letter {
+    top: 0.25em;
+    left: 0.8em;
+  }
+}
+.tile sup {
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
+  font-size: 0.25em;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  pointer-events: none;
+}
+
+button#submit {
+  font-size: 2em;
+  margin: 0.5em;
+}/*# sourceMappingURL=main.css.map */

@@ -1,0 +1,106 @@
+html{
+    font-size: 12px;
+}
+
+main{
+    text-align: center;
+}
+
+.hide{
+    user-select: none;
+    pointer-events: none;
+    opacity: .1;
+}
+
+#game-grid{
+    margin: 0 auto 0 auto;
+
+    @media only screen and (min-width:300px){ 
+        width: 100%;
+        font-size: .7em;
+        max-width: 800px;
+      }
+  
+      @media only screen and (min-width:1025px){ 
+        width: 40%;
+        max-width: 800px;
+      }
+
+    width: 40%;
+    max-width: 800px;
+
+
+    border: 1px  black inset;
+    
+    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    
+    justify-content: space-around; 
+
+}
+
+#word-container, #score-container{
+    min-height: 3rem;
+    font-size: 3em;
+    padding: 0px;
+    margin: 0px;
+}
+
+.tile-container{
+    width: 20%;
+    transition: all .3s;
+    border-radius: 1em;
+}
+
+.tile-selected .tile{
+    border: 5px #300 inset;
+}
+
+.tile{
+    border: 1px solid black;
+    border-radius: .1em;
+    padding: 0px;
+    margin: 0px;
+    position: relative;
+    
+    font-size: 5em;
+    height: 1.5em;
+    pointer-events: none;
+
+    .letter{
+        font-size: 1em;
+        position: relative;
+        position: absolute;
+
+
+        @media only screen and (min-width:300px){ 
+            top: .25em;
+            left:.6em;
+          }
+      
+          @media only screen and (min-width:1025px){ 
+            top: .25em;
+            left:.8em;
+          }
+
+        user-select: none;
+        pointer-events: none;
+    }
+    
+    sup{
+        position: absolute;
+        top: .5em;
+        left: .5em;
+        font-size: .25em;
+        user-select: none;
+        pointer-events: none;
+    }
+}
+
+
+button#submit{
+    font-size: 2em;
+    margin:.5em;
+}
