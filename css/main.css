@@ -9,28 +9,38 @@ main {
 .hide {
   -webkit-user-select: none;
      -moz-user-select: none;
+      -ms-user-select: none;
           user-select: none;
   pointer-events: none;
-  opacity: 0.1;
+  opacity: .1;
 }
 
 #game-grid {
   margin: 0 auto 0 auto;
   width: 40%;
   max-width: 800px;
-  border: 1px black inset;
+  border: 1px  black inset;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
 }
+
 @media only screen and (min-width: 300px) {
   #game-grid {
     width: 100%;
-    font-size: 0.7em;
+    font-size: .7em;
     max-width: 800px;
   }
 }
+
 @media only screen and (min-width: 1025px) {
   #game-grid {
     width: 40%;
@@ -47,7 +57,8 @@ main {
 
 .tile-container {
   width: 20%;
-  transition: all 0.3s;
+  -webkit-transition: all .3s;
+  transition: all .3s;
   border-radius: 1em;
 }
 
@@ -57,7 +68,7 @@ main {
 
 .tile {
   border: 1px solid black;
-  border-radius: 0.1em;
+  border-radius: .1em;
   padding: 0px;
   margin: 0px;
   position: relative;
@@ -65,39 +76,58 @@ main {
   height: 1.5em;
   pointer-events: none;
 }
+
 .tile .letter {
   font-size: 1em;
   position: relative;
   position: absolute;
   -webkit-user-select: none;
      -moz-user-select: none;
+      -ms-user-select: none;
           user-select: none;
   pointer-events: none;
 }
+
 @media only screen and (min-width: 300px) {
   .tile .letter {
-    top: 0.25em;
-    left: 0.6em;
+    top: .25em;
+    left: .6em;
   }
 }
+
 @media only screen and (min-width: 1025px) {
   .tile .letter {
-    top: 0.25em;
-    left: 0.8em;
+    top: .25em;
+    left: .8em;
   }
 }
+
 .tile sup {
   position: absolute;
-  top: 0.5em;
-  left: 0.5em;
-  font-size: 0.25em;
+  top: .5em;
+  left: .5em;
+  font-size: .25em;
   -webkit-user-select: none;
      -moz-user-select: none;
+      -ms-user-select: none;
           user-select: none;
   pointer-events: none;
 }
 
 button#submit {
   font-size: 2em;
-  margin: 0.5em;
-}/*# sourceMappingURL=main.css.map */
+  margin: .5em;
+}
+
+#upcoming {
+  font-size: 1.5em;
+  padding: 0;
+  margin: 1em;
+}
+
+#upcoming li {
+  display: inline-block;
+  border: 1px solid #333;
+  padding: 1em;
+}
+/*# sourceMappingURL=main.css.map */
