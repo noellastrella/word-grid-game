@@ -81,7 +81,6 @@
             tiles[i].addEventListener("click", addLetter);
         }
 
-        document.querySelector("#submit").addEventListener("click", checkWord)
         document.querySelector("#clear").addEventListener("click", clearLetters)
 
         updateState();
