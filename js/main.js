@@ -3,15 +3,13 @@
     let tiles = [];
     let randomtimer = 20;
     let minTimer = 20;
-    let tempI = 0;
     let words = [];
     let wordsGuessed = [];
-    let score=0;
-    let upcomingPos = 0;
-    
+    let score = 0;
     let selectedLetters = [];
     
     const tileCount = 25;
+
     const letters = [
         {letter: "A", val: 1},
         {letter: "B", val: 2},
@@ -46,14 +44,12 @@
         {letter: "U", val: 1}
     ]
 
-    let upComingLetters =[]
+    let upComingLetters =[];
     
     for(let i=0; i<15; i++) addUpcoming(i);
-        
 
-    console.log(upComingLetters)
+//-- FETCH ----------------------------------------------------------------------------
 
-  //-- FETCH ----------------------------------------------------------------------------
     var wordFile = './js/wordlist/wordsFiltered.json' +"?num="+Math.random();  //'/js/wordlist/words273k.json'
   
     fetch(wordFile)
@@ -73,6 +69,7 @@
       .catch(error => console.error('Fetch error:', error) );
 
 //-- INIT ----------------------------------------------------------------------------
+
     function init(){
         for(let i=0; i<tileCount; i++){
             tiles.push(createTile());
@@ -87,9 +84,10 @@
         checkUpcoming();
         render();
     }
+
 //-- RENDER ----------------------------------------------------------------------------
+
     function render(){
-        tempI++;
 
         tiles.reduce((acc,curr)=>{
             let expireTime = curr.dataset["timer"];
@@ -113,18 +111,21 @@
 
         window.requestAnimationFrame(render);
     }
+
 //--- REMOVE LETTER ---------------------------------------------------------------------------
+    
     function removeLetter(el){
         el.classList.remove("tile-selected");
         selectedLettersTemp = selectedLetters.reduce((acc, curr)=>{
-            console.log(el.id , curr.target.id, curr, el.id != curr.target.id)
             if(el.id != curr.target.id) acc=[...acc, curr]
             return acc
         }, []);
 
         selectedLetters = selectedLettersTemp;
     }
+
 //-- ADD LETTER ----------------------------------------------------------------------------
+    
     function addLetter(el){
         if(!el.target.classList.contains("tile-selected")){
             el.target.classList.add("tile-selected");
@@ -137,6 +138,7 @@
         updateState();
     }
 //-- UPDATE STATE----------------------------------------------------------------------------
+
     function updateState(){
         let wordTemp = "";
         selectedLetters.forEach(e=>{
@@ -146,8 +148,9 @@
         document.querySelector("#words-used").innerHTML = wordsGuessed.reduce((acc,curr)=>acc+=`<li>${curr.word} | ${curr.score}</li>`,"")
         document.querySelector("#word").innerHTML= wordTemp;
         document.querySelector("#score").innerHTML= score;
-        checkUpcoming()
+        checkUpcoming();
     }
+
 //-- UPCOMING LETTERS ----------------------------------------------------------------------------
 
     function checkUpcoming(){
@@ -171,49 +174,44 @@
     }
 
 //-- CLEAR LETTERS ----------------------------------------------------------------------------
-    function clearLetters(){
-        selectedLetters.forEach((e)=>{
-            e.target.classList.remove("tile-selected"); 
-        }, [])
 
+    function clearLetters(){
+        selectedLetters.forEach((e)=> e.target.classList.remove("tile-selected"), []);
         selectedLetters = [];
         updateState();
     }
-//-- CHECK WORD ----------------------------------------------------------------------------
-    function checkWord(){
-        let wordTemp = selectedLetters.reduce((arr,curr)=>{
-            return arr+=curr.target.dataset["letter"];
-        },"").toLowerCase();
 
+//-- CHECK WORD ----------------------------------------------------------------------------
+
+    function checkWord(){
+        let wordTemp = selectedLetters.reduce((arr,curr)=> arr+=curr.target.dataset["letter"],"").toLowerCase();
         let currScore = 0;
 
         if(words.includes(wordTemp)){
-            
             selectedLetters.forEach((e,i)=>{
                 let letterTemp = upComingLetters.shift();
+
+                currScore += Number(e.target.dataset["score"]);
+                console.log(e.target.dataset["score"], currScore, e.target.dataset.letter)
+
                 addUpcoming(i);
-                upcomingPos++;
                 populateTile(e.target,letterTemp);
 
                 document.querySelector("#upcoming").removeChild(letterTemp.el)
                 e.target.classList.remove("tile-selected"); 
-                currScore += Number(e.target.dataset["score"]);
             })
 
-            score += currScore * selectedLetters.length;
+            score += currScore * (selectedLetters.length);
+            console.log(currScore, selectedLetters.length)
             wordsGuessed.push({"word":wordTemp, "score" : currScore});
             selectedLetters = [];
         }
         
         updateState();
     }
-//-- RESET STATE ----------------------------------------------------------------------------
-    function resetState(){
-        score = 0;
-        selectedLetters = [];
-        wordsGuessed = [];
-    }
+
 //-- CREATE TILE ----------------------------------------------------------------------------
+    
     function createTile(){
         let el = document.createElement("div");
         let tile = document.createElement("div");
@@ -231,7 +229,9 @@
 
         return el;
     }
+
 //-- POPULATE TILE ----------------------------------------------------------------------------
+    
     function populateTile(el, o){
         let timer = Date.now()+((Math.random()*randomtimer)+ minTimer)*1000;
 
@@ -240,9 +240,7 @@
         el.setAttribute('data-timer', timer);
         el.setAttribute('data-remaining', timer - Date.now());
         el.setAttribute('data-time', timer - Date.now());
-
         el.setAttribute('id', o.letter+"-"+Math.round(Math.random()*100000));
-
         el.querySelector(".letter").innerHTML = o.letter;
         el.querySelector(".score").innerHTML = o.val;
     }

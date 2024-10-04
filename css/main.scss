@@ -28,11 +28,8 @@ main{
 
     width: 40%;
     max-width: 800px;
-
-
     border: 1px  black inset;
-    
-    
+
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -98,7 +95,6 @@ main{
         pointer-events: none;
     }
 }
-
 
 button#submit{
     font-size: 2em;
