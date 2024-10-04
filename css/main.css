@@ -119,15 +119,56 @@ button#submit {
   margin: .5em;
 }
 
-#upcoming {
-  font-size: 1.5em;
-  padding: 0;
-  margin: 1em;
+.usedTile {
+  position: relative;
+  left: -10em;
 }
 
-#upcoming li {
-  display: inline-block;
+#upcoming-container {
+  margin: 1em auto;
+  overflow: hidden;
+  position: relative;
+  height: 8em;
+  border-radius: 1em;
+  border: 1px  solid #ccc;
+  background-color: #CCC;
+}
+
+@media only screen and (min-width: 300px) {
+  #upcoming-container {
+    width: 90%;
+    font-size: .62em;
+    padding: .9em;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  #upcoming-container {
+    width: 35%;
+    font-size: .9em;
+    padding: .9em;
+  }
+}
+
+#upcoming-container #upcoming {
+  font-size: 1.5em;
+  padding: 0;
+  width: calc(1em* 32);
+  position: relative;
+  -webkit-transition: all 1s;
+  transition: all 1s;
+}
+
+#upcoming-container #upcoming li {
+  width: 1em;
+  border-radius: 50%;
+  -webkit-transition: all 1s;
+  transition: all 1s;
+  list-style: none;
+  display: inline;
   border: 1px solid #333;
   padding: 1em;
+  position: absolute;
+  left: 30em;
 }
 /*# sourceMappingURL=main.css.map */
