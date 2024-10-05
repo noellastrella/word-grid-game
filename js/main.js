@@ -7,6 +7,8 @@
     let wordsGuessed = [];
     let score = 0;
     let selectedLetters = [];
+
+    const fps = 25;
     
     const tileCount = 25;
 
@@ -96,8 +98,6 @@
             let col = "0F0"
             if(timeRemaining>0){
                 let x = timeRemaining/setTime
-                //if(x < .3) col = "HSL";
-                //col = `rgb(${255- (255*x)}, ${x*255},100)`
                 col = `hsl(${(140*(x/1.5))}, 100%, 50%)`
                 curr.dataset["remaining"] = timeRemaining;
                 curr.style = `background: linear-gradient(to bottom,  #FFF ${100-(timeRemaining/setTime)*100}%,  ${col} 1%,  ${col} 100%);  `
@@ -113,7 +113,10 @@
             return acc;
         }, [])
 
-        window.requestAnimationFrame(render);
+        setTimeout(() => {
+            requestAnimationFrame(render);
+        }, 1000 / fps);
+        
     }
 
 //--- REMOVE LETTER ---------------------------------------------------------------------------
