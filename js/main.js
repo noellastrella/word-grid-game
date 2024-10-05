@@ -93,11 +93,15 @@
             let expireTime = curr.dataset["timer"];
             let timeRemaining = expireTime - Date.now()
             let setTime = curr.dataset["time"];
-            
+            let col = "0F0"
             if(timeRemaining>0){
+                let x = timeRemaining/setTime
+                //if(x < .3) col = "HSL";
+                //col = `rgb(${255- (255*x)}, ${x*255},100)`
+                col = `hsl(${(140*(x/1.5))}, 100%, 50%)`
                 curr.dataset["remaining"] = timeRemaining;
-                curr.style = `background-image: linear-gradient(to bottom,  #FFF ${100-(timeRemaining/setTime)*100}%,  #0F0 1%,  #0F0 100%);  `
-                curr.dataset["x"] = timeRemaining/setTime;
+                curr.style = `background: linear-gradient(to bottom,  #FFF ${100-(timeRemaining/setTime)*100}%,  ${col} 1%,  ${col} 100%);  `
+                curr.dataset["x"] = x;
                 acc.push(curr);
                 
             }else{

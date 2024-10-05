@@ -13,13 +13,15 @@ main {
           user-select: none;
   pointer-events: none;
   opacity: .1;
+  -webkit-transform: perspective(500px) translate3d(0px, 0, -100px);
+          transform: perspective(500px) translate3d(0px, 0, -100px);
 }
 
 #game-grid {
-  margin: 0 auto 0 auto;
+  margin: 2em auto;
   width: 40%;
   max-width: 800px;
-  border: 1px  black inset;
+  border: 0px  black inset;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -56,10 +58,10 @@ main {
 }
 
 .tile-container {
-  width: 20%;
+  width: 18%;
   -webkit-transition: all .3s;
   transition: all .3s;
-  border-radius: 1em;
+  margin: .5em .25em;
 }
 
 .tile-selected .tile {
