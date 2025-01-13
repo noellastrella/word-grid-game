@@ -240,7 +240,7 @@
 //-- POPULATE TILE ----------------------------------------------------------------------------
     
     function populateTile(el, o){
-        let timer = Date.now()+((Math.random()*randomtimer)+ minTimer)*1000;
+        let timer = Date.now()+((Math.random()*randomtimer)+ minTimer + (o.val*2))*1000;
 
         el.setAttribute('data-letter', o.letter);
         el.setAttribute('data-score', o.val);
