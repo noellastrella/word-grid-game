@@ -31,7 +31,11 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <main id="main" class="game-container">
-            <section id="score-container">Score: <span id="score"></span></section>
+            <section id="score-container">
+                <label> Score: <span id="score"></span></label>
+                <label> Best Score: <span id="hi-score"></span></label>
+            </section>
+            
             <section id="word-container">🤔: <span id="word"></span></section>
             <section id="upcoming-container">
                 Upcoming Letters: <ul id="upcoming"></ul>
@@ -39,13 +43,27 @@
             <section id="game-grid">
 
             </section>
+
             <section id="text"></section>
+            <button id="reset">X</button>
             <button id="clear">CLEAR</button>
+            <button id="submit">SUBMIT</button>
+            
+            <section id="game-over" class="hidden">
+                <section id="game-over-banner">
+                    <h2>GAME OVER</h2>
+                    <ul>
+                        <li> Score: <span id="score2"></span></li>
+                        <li> Best Score: <span id="hi-score2"></span></li>
+                    </ul>
+                    <button id="restart">RESTART</button>
+                </section>
+
+            </section>
         </main>
         <aside>
             <header>Words Used</header>
             <ol id="words-used">
-
             </ol>
         </aside>
         <script src="js/main.js?id=36" async defer></script>

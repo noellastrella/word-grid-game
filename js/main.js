@@ -1,14 +1,20 @@
 (()=>{
+
 //-- VARIABLES ----------------------------------------------------------------------------
     let tiles = [];
     let randomtimer = 20;
-    let minTimer = 20;
+    let minTimer = 30;
     let words = [];
     let wordsGuessed = [];
     let score = 0;
     let selectedLetters = [];
+    let bonusTime = 0;
+    let reset = false;
+    let bonusMultiplier = 20;
 
-    const fps = 25;
+    let highScore = localStorage.getItem("highScore")?localStorage.getItem("highScore"):0;
+
+    const fps = 35;
     
     const tileCount = 25;
 
@@ -81,21 +87,42 @@
         }
 
         document.querySelector("#clear").addEventListener("click", clearLetters)
+        document.querySelector("#submit").addEventListener('click', checkWord)
+        document.querySelector("#reset").addEventListener("click", resetState)
+        document.querySelector("#restart").addEventListener("click", resetState)
+        document.addEventListener("keydown", (e)=>{if(e.key=="Enter") checkWord();})
 
         updateState();
         checkUpcoming();
         render();
     }
 
+//-- RESET STATE ----------------------------------------------------------------------------
+
+    function resetState(e){
+        
+        reset = true;
+        wordsGuessed = [];
+        score = 0;
+        selectedLetters = [];
+        bonusTime = 0;
+        tiles = [];
+
+        document.querySelector("#game-over").classList.add("hidden");
+        document.querySelector("#game-grid").innerHTML = ""
+        init();
+    }
+
 //-- RENDER ----------------------------------------------------------------------------
 
     function render(){
 
-        tiles.reduce((acc,curr)=>{
+        let count = tiles.reduce((acc,curr)=>{
             let expireTime = curr.dataset["timer"];
             let timeRemaining = expireTime - Date.now()
             let setTime = curr.dataset["time"];
             let col = "0F0"
+
             if(timeRemaining>0){
                 let x = timeRemaining/setTime
                 col = `hsl(${(140*(x/1.5))}, 100%, 50%)`
@@ -111,12 +138,20 @@
                 }
             }
             return acc;
-        }, [])
+        }, []);
 
         setTimeout(() => {
-            requestAnimationFrame(render);
+            if(!reset){
+                if(count.length >0){
+                    requestAnimationFrame(render);
+                }else{
+                    document.querySelector("#game-over").classList.remove("hidden");
+                }
+            }else{
+                reset = false;
+                init();
+            }
         }, 1000 / fps);
-        
     }
 
 //--- REMOVE LETTER ---------------------------------------------------------------------------
@@ -141,7 +176,6 @@
             removeLetter(el.target);  
         }
         
-        checkWord();
         updateState();
     }
 //-- UPDATE STATE----------------------------------------------------------------------------
@@ -155,6 +189,11 @@
         document.querySelector("#words-used").innerHTML = wordsGuessed.reduce((acc,curr)=>acc+=`<li>${curr.word} | ${curr.score}</li>`,"")
         document.querySelector("#word").innerHTML= wordTemp;
         document.querySelector("#score").innerHTML= score;
+        document.querySelector("#hi-score").innerHTML= highScore;
+
+        document.querySelector("#score2").innerHTML= score;
+        document.querySelector("#hi-score2").innerHTML= highScore;
+
         checkUpcoming();
     }
 
@@ -195,11 +234,17 @@
         let currScore = 0;
 
         if(words.includes(wordTemp)){
+
+            tiles.reduce((acc,curr)=>{
+                curr.dataset["timer"] = Number(curr.dataset["timer"])  + bonusTime;
+                return acc;
+            })
+            bonusTime = 0;
+
             selectedLetters.forEach((e,i)=>{
                 let letterTemp = upComingLetters.shift();
 
                 currScore += Number(e.target.dataset["score"]);
-                console.log(e.target.dataset["score"], currScore, e.target.dataset.letter)
 
                 addUpcoming(i);
                 populateTile(e.target,letterTemp);
@@ -209,7 +254,13 @@
             })
 
             score += currScore * (selectedLetters.length);
-            console.log(currScore, selectedLetters.length)
+            
+            if(score > highScore){
+                localStorage.setItem("highScore", score);
+                highScore = score;
+            }
+
+            bonusTime = score * bonusMultiplier;
             wordsGuessed.push({"word":wordTemp, "score" : currScore});
             selectedLetters = [];
         }
