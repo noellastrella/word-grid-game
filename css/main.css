@@ -2,6 +2,8 @@ html {
   font-size: 12px;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-weight: 700;
+  background-color: #333;
+  color: #FFF;
 }
 
 main {
@@ -18,7 +20,7 @@ main {
 }
 
 #game-grid {
-  margin: 2em auto;
+  margin: 0em auto 2em auto;
   width: 40%;
   max-width: 800px;
   border: 0px black inset;
@@ -44,34 +46,62 @@ main {
 #score-container {
   display: flex;
   justify-content: space-between;
+  padding-bottom: 1em;
 }
 
 #word-container, #score-container {
   min-height: 3rem;
-  font-size: 3em;
-  padding: 0px;
+  padding: 0.25em 0px;
+  border-bottom: #000 1px solid;
   margin: 0px;
+}
+@media only screen and (min-width: 300px) {
+  #word-container, #score-container {
+    font-size: 2em;
+  }
+}
+@media only screen and (min-width: 1025px) {
+  #word-container, #score-container {
+    font-size: 3em;
+  }
+}
+
+.tile-container .tile {
+  border-radius: 0.5em !important;
+  overflow: hidden !important;
 }
 
 .tile-container {
   width: 18%;
   transition: all 0.3s;
   margin: 0.5em 0.25em;
+  overflow: hidden;
+  color: black;
 }
 
 .tile-selected .tile {
-  border: 5px #300 inset;
+  border: 10px inset black;
+  color: #C00;
 }
 
 .tile {
-  border: 1px solid black;
-  border-radius: 0.1em;
+  border: 10px inset white;
+  overflow: hidden;
   padding: 0px;
   margin: 0px;
   position: relative;
-  font-size: 5em;
   height: 1.5em;
   pointer-events: none;
+}
+@media only screen and (min-width: 300px) {
+  .tile {
+    font-size: 4em;
+  }
+}
+@media only screen and (min-width: 1025px) {
+  .tile {
+    font-size: 5em;
+  }
 }
 .tile .letter {
   font-size: 1em;
@@ -108,8 +138,19 @@ main {
 button {
   font-size: 1.5em;
   margin: 0.5em;
-  padding: 0.25em 2em;
+  padding: 0.25em 1.7em;
   border-radius: 1em;
+  border: 10px inset #000;
+}
+@media only screen and (min-width: 300px) {
+  button {
+    font-size: 1.25em;
+  }
+}
+@media only screen and (min-width: 1025px) {
+  button {
+    font-size: 1.5em;
+  }
 }
 button#submit {
   background-color: lime;
@@ -134,11 +175,11 @@ button#clear:active {
 }
 
 #game-over {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   display: block;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 0, 0, 0.7);
   width: 100%;
   height: 100%;
 }
@@ -148,10 +189,10 @@ button#clear:active {
 
 #game-over-banner {
   position: absolute;
-  height: 30%;
+  height: 100%;
   width: 100%;
   background-color: red;
-  top: 30%;
+  top: 0;
   text-align: center;
   vertical-align: middle;
   display: flex;
@@ -205,6 +246,12 @@ button#clear:active {
     padding: 0.9em;
   }
 }
+#upcoming-container span {
+  font-size: 1.5em;
+  position: absolute;
+  display: block;
+  left: 0;
+}
 #upcoming-container #upcoming {
   font-size: 1em;
   padding: 0;
@@ -214,15 +261,25 @@ button#clear:active {
   transition: all 1s;
 }
 #upcoming-container #upcoming li {
+  font-size: 2em;
+  color: black;
   width: 1em;
-  border-radius: 0%;
+  border-radius: 2em;
   transition: all 1s;
   list-style: none;
   display: inline;
-  border: 2px solid #333;
-  padding: 1em;
+  border: 5px inset #333;
+  padding: 0.8em;
   position: absolute;
   background-color: #FFF;
   opacity: 0.5;
   left: 0em;
+}
+
+#words-used {
+  color: #FFF;
+  text-align: left;
+  font-size: 2em;
+  height: 20%;
+  overflow: scroll;
 }/*# sourceMappingURL=main.css.map */

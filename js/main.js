@@ -3,14 +3,14 @@
 //-- VARIABLES ----------------------------------------------------------------------------
     let tiles = [];
     let randomtimer = 20;
-    let minTimer = 30;
+    let minTimer = 20;
     let words = [];
     let wordsGuessed = [];
     let score = 0;
     let selectedLetters = [];
     let bonusTime = 0;
     let reset = false;
-    let bonusMultiplier = 20;
+    let bonusMultiplier = 10;
 
     let highScore = localStorage.getItem("highScore")?localStorage.getItem("highScore"):0;
 
@@ -123,11 +123,15 @@
             let setTime = curr.dataset["time"];
             let col = "0F0"
 
+            //console.log(curr.querySelector(".tile"))
+
+            let tile = curr.querySelector(".tile");
+
             if(timeRemaining>0){
                 let x = timeRemaining/setTime
                 col = `hsl(${(140*(x/1.5))}, 100%, 50%)`
                 curr.dataset["remaining"] = timeRemaining;
-                curr.style = `background: linear-gradient(to bottom,  #FFF ${100-(timeRemaining/setTime)*100}%,  ${col} 1%,  ${col} 100%);  `
+                tile.style = `background: linear-gradient(to bottom,  #FFF ${100-(timeRemaining/setTime)*100}%,  ${col} 1%,  ${col} 100%);  `
                 curr.dataset["x"] = x;
                 acc.push(curr);
                 
