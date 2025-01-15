@@ -10,6 +10,11 @@ main {
   text-align: center;
 }
 
+#error {
+  color: #f33;
+  font-size: 0.75em;
+}
+
 .hide {
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -48,22 +53,36 @@ main {
   justify-content: space-between;
   padding-bottom: 1em;
 }
+@media only screen and (min-width: 300px) {
+  #score-container {
+    font-size: 1.5em;
+  }
+}
+@media only screen and (min-width: 1025px) {
+  #score-container {
+    font-size: 2em;
+  }
+}
+
+#word-container {
+  color: yellow;
+}
+@media only screen and (min-width: 300px) {
+  #word-container {
+    font-size: 2em;
+  }
+}
+@media only screen and (min-width: 1025px) {
+  #word-container {
+    font-size: 3em;
+  }
+}
 
 #word-container, #score-container {
   min-height: 3rem;
   padding: 0.25em 0px;
   border-bottom: #000 1px solid;
   margin: 0px;
-}
-@media only screen and (min-width: 300px) {
-  #word-container, #score-container {
-    font-size: 2em;
-  }
-}
-@media only screen and (min-width: 1025px) {
-  #word-container, #score-container {
-    font-size: 3em;
-  }
 }
 
 .tile-container .tile {
@@ -80,15 +99,15 @@ main {
 }
 
 .tile-selected .tile {
-  border: 10px inset black;
-  color: #C00;
+  border: 0.2em inset #F66;
+  color: #060;
 }
 
 .tile {
-  border: 10px inset white;
+  border: 0.2em inset white;
   overflow: hidden;
   padding: 0px;
-  margin: 0px;
+  margin: 0.1em;
   position: relative;
   height: 1.5em;
   pointer-events: none;
@@ -179,7 +198,7 @@ button#clear:active {
   top: 0;
   left: 0;
   display: block;
-  background-color: rgba(255, 0, 0, 0.7);
+  background-color: rgba(204, 0, 0, 0.95);
   width: 100%;
   height: 100%;
 }
@@ -191,7 +210,6 @@ button#clear:active {
   position: absolute;
   height: 100%;
   width: 100%;
-  background-color: red;
   top: 0;
   text-align: center;
   vertical-align: middle;
@@ -280,6 +298,6 @@ button#clear:active {
   color: #FFF;
   text-align: left;
   font-size: 2em;
-  height: 20%;
+  height: 100%;
   overflow: scroll;
 }/*# sourceMappingURL=main.css.map */

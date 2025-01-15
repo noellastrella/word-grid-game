@@ -2,20 +2,22 @@
 
 //-- VARIABLES ----------------------------------------------------------------------------
     let tiles = [];
-    let randomtimer = 20;
-    let minTimer = 20;
+    let randomtimer = 100;
+    let minTimer = 100;
     let words = [];
     let wordsGuessed = [];
     let score = 0;
     let selectedLetters = [];
     let bonusTime = 0;
     let reset = false;
-    let bonusMultiplier = 10;
+    let currLVL = 1;
+    let bonusMultiplier = 100; 
+
+    let errorMsg = "";
 
     let highScore = localStorage.getItem("highScore")?localStorage.getItem("highScore"):0;
 
     const fps = 35;
-    
     const tileCount = 25;
 
     const letters = [
@@ -45,6 +47,24 @@
         {letter: "X", val: 7},
         {letter: "Y", val: 8},
         {letter: "Z", val: 10},
+        //extra letters
+        {letter: "B", val: 2},
+        {letter: "C", val: 3},
+        {letter: "D", val: 4},
+        {letter: "L", val: 3},
+        {letter: "M", val: 3},
+        {letter: "N", val: 3},
+        {letter: "P", val: 3},
+        {letter: "R", val: 2},
+        {letter: "S", val: 2},
+        {letter: "T", val: 2},
+
+        //extra vowels
+        {letter: "A", val: 1},
+        {letter: "E", val: 1},
+        {letter: "I", val: 1},
+        {letter: "O", val: 1},
+        {letter: "U", val: 1},
         {letter: "A", val: 1},
         {letter: "E", val: 1},
         {letter: "I", val: 1},
@@ -88,7 +108,7 @@
 
         document.querySelector("#clear").addEventListener("click", clearLetters)
         document.querySelector("#submit").addEventListener('click', checkWord)
-        document.querySelector("#reset").addEventListener("click", resetState)
+        document.querySelector("#reset").addEventListener("click", gameOver)
         document.querySelector("#restart").addEventListener("click", resetState)
         document.addEventListener("keydown", (e)=>{if(e.key=="Enter") checkWord();})
 
@@ -96,6 +116,11 @@
         checkUpcoming();
         render();
     }
+//-- GAME OVER ------------------------------------------------------------------------------
+
+function gameOver(){
+    document.querySelector("#game-over").classList.remove("hidden");
+}
 
 //-- RESET STATE ----------------------------------------------------------------------------
 
@@ -121,17 +146,15 @@
             let expireTime = curr.dataset["timer"];
             let timeRemaining = expireTime - Date.now()
             let setTime = curr.dataset["time"];
-            let col = "0F0"
-
-            //console.log(curr.querySelector(".tile"))
+            let col = "0F0";
 
             let tile = curr.querySelector(".tile");
 
             if(timeRemaining>0){
-                let x = timeRemaining/setTime
-                col = `hsl(${(140*(x/1.5))}, 100%, 50%)`
+                let x = timeRemaining/setTime;
+                col = `hsl(${(140*(x/1.5))}, 100%, 50%)`;
                 curr.dataset["remaining"] = timeRemaining;
-                tile.style = `background: linear-gradient(to bottom,  #FFF ${100-(timeRemaining/setTime)*100}%,  ${col} 1%,  ${col} 100%);  `
+                tile.style = `background: linear-gradient(to bottom,  #FFF ${100-(timeRemaining/setTime)*100}%,  ${col} 1%,  ${col} 100%);  `;
                 curr.dataset["x"] = x;
                 acc.push(curr);
                 
@@ -149,7 +172,7 @@
                 if(count.length >0){
                     requestAnimationFrame(render);
                 }else{
-                    document.querySelector("#game-over").classList.remove("hidden");
+                    gameOver();
                 }
             }else{
                 reset = false;
@@ -168,6 +191,7 @@
         }, []);
 
         selectedLetters = selectedLettersTemp;
+        errorMsg = "";
     }
 
 //-- ADD LETTER ----------------------------------------------------------------------------
@@ -179,7 +203,7 @@
         }else{
             removeLetter(el.target);  
         }
-        
+        errorMsg = "";
         updateState();
     }
 //-- UPDATE STATE----------------------------------------------------------------------------
@@ -195,8 +219,13 @@
         document.querySelector("#score").innerHTML= score;
         document.querySelector("#hi-score").innerHTML= highScore;
 
+        document.querySelector("#lvl").innerHTML= currLVL;
+        document.querySelector("#lvl2").innerHTML= currLVL;
+
         document.querySelector("#score2").innerHTML= score;
         document.querySelector("#hi-score2").innerHTML= highScore;
+
+        document.querySelector("#error").innerHTML = errorMsg;
 
         checkUpcoming();
     }
@@ -228,6 +257,7 @@
     function clearLetters(){
         selectedLetters.forEach((e)=> e.target.classList.remove("tile-selected"), []);
         selectedLetters = [];
+        errorMsg = "";
         updateState();
     }
 
@@ -258,15 +288,23 @@
             })
 
             score += currScore * (selectedLetters.length);
+            currLVL = Math.ceil(score / 100 );
             
             if(score > highScore){
                 localStorage.setItem("highScore", score);
                 highScore = score;
             }
+                       
+            bonusTime = score * (bonusMultiplier / ( 1 + (currLVL * .2)));
 
-            bonusTime = score * bonusMultiplier;
             wordsGuessed.push({"word":wordTemp, "score" : currScore});
             selectedLetters = [];
+        }else{
+            if(wordTemp.length > 3){
+                errorMsg = " (invalid word)"
+            }else{
+                errorMsg = " (too short)"
+            }
         }
         
         updateState();
@@ -295,7 +333,11 @@
 //-- POPULATE TILE ----------------------------------------------------------------------------
     
     function populateTile(el, o){
-        let timer = Date.now()+((Math.random()*randomtimer)+ minTimer + (o.val*2))*1000;
+        let lvlModifier = currLVL * 1.1;
+
+        let timer = Date.now()+((Math.random()*(randomtimer / lvlModifier))+ (minTimer / lvlModifier) + (o.val*2))*1000;
+
+        //console.log("timer, lvlModifier:",(timer-Date.now()), lvlModifier)
 
         el.setAttribute('data-letter', o.letter);
         el.setAttribute('data-score', o.val);
