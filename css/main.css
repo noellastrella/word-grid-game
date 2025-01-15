@@ -290,19 +290,24 @@ button#clear:active {
      -moz-user-select: none;
           user-select: none;
   font-size: 1.75em;
-  color: black;
+  color: #FFF;
   width: 1em;
   border-radius: 2em;
-  transition: all 1s;
+  transition: all 0.25s;
   list-style: none;
   display: inline;
   border: 5px inset #000;
   padding: 0.7em;
   position: absolute;
-  background-color: #FFF;
-  opacity: 0.5;
+  background-color: rgb(59, 133, 190);
   left: 0em;
   top: 0.5em;
+}
+#upcoming-container #upcoming li:active {
+  transition: all 0.1s;
+  background-color: rgb(255, 255, 255);
+  border: 5px inset #F66;
+  color: #000000;
 }
 
 #words-used {
@@ -311,4 +316,43 @@ button#clear:active {
   font-size: 2em;
   height: 40vh;
   overflow: scroll;
+}
+
+#word-score-container {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  pointer-events: none;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  background: none;
+}
+
+.word-score {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  pointer-events: none;
+  border: 2px inset green;
+  background: black;
+  padding: 0.2em 1em;
+  font-size: 3em;
+  color: rgb(103, 215, 103);
+  position: absolute;
+  transition: all 1s ease;
+  -webkit-transition: all 1s ease;
+  opacity: 0.4;
+  border-radius: 1em;
+}
+.word-score.show {
+  opacity: 1;
+  top: 50vh;
+}
+.word-score.fade {
+  opacity: 0 !important;
+  top: 20vh !important;
 }/*# sourceMappingURL=main.css.map */

@@ -11,11 +11,12 @@
     let currLVL = 1; 
     let errorMsg = "";
 
-    const randomtimer = 100;
-    const minTimer = 100;
+    const randomtimer = 130;
+    const minTimer = 130;
     const bonusMultiplier = 100;
-    const fps = 35;
+    const fps = 35;  //affects render 
     const tileCount = 25;
+    const bonusDegradationRate = .2; // bonusMultiplier is divided by (1 + bonusDegradationRate)
 
     let highScore = localStorage.getItem("highScore")?localStorage.getItem("highScore"):0;
 
@@ -121,7 +122,6 @@ function gameOver(){
             let timeRemaining = expireTime - Date.now()
             let setTime = curr.dataset["time"];
             let col = "0F0";
-
             let tile = curr.querySelector(".tile");
 
             if(timeRemaining>0){
@@ -131,7 +131,6 @@ function gameOver(){
                 tile.style = `background: linear-gradient(to bottom,  #FFF ${100-(timeRemaining/setTime)*100}%,  ${col} 1%,  ${col} 100%);  `;
                 curr.dataset["x"] = x;
                 acc.push(curr);
-                
             }else{
                 if(!curr.classList.contains("hide")){
                     curr.classList.add("hide");
@@ -215,6 +214,7 @@ function gameOver(){
         let letterObj =  JSON.parse(JSON.stringify(letters[Math.floor(Math.random()*letters.length)]))
 
         letterObj.id = `letter${letterObj.letter}${Math.floor(Math.random()*100000 * i)}`;
+        
         letterObj.el =  document.createElement("li");
         letterObj.el.setAttribute("id",  letterObj.id)
         letterObj.el.classList.add("upcomingLetter")
@@ -226,7 +226,7 @@ function gameOver(){
         document.querySelector("#upcoming").appendChild(letterObj.el);
 
         letterObj.el.addEventListener("click", (e)=>{
-            //remove upcoming - game dynamic
+            //remove/replace upcoming - game mechanic
             document.querySelector("#upcoming").removeChild(e.target);
             
             upComingLetters = upComingLetters.reduce((acc,next)=>{    
@@ -280,8 +280,9 @@ function gameOver(){
                 highScore = score;
             }
                        
-            bonusTime = score * (bonusMultiplier / ( 1 + (currLVL * .2)));
-
+            bonusTime = score * (bonusMultiplier / ( 1 + (currLVL * bonusDegradationRate)));
+            
+            createPointTile(wordTemp, currScore)
             wordsGuessed.push({"word":wordTemp, "score" : currScore});
             selectedLetters = [];
         }else{
@@ -331,4 +332,45 @@ function gameOver(){
         el.querySelector(".letter").innerHTML = o.letter;
         el.querySelector(".score").innerHTML = o.val;
     }
-})()
+
+//-- WORD POINT TILE ----------------------------------------------------------------------------
+
+    function createPointTile(word, score){
+        let xPos = Math.random() * (Math.round(window.screen.width/1.2));
+        let yPos = window.screen.height * .8;
+        let el = document.createElement("div");
+        let opacity = 3;
+
+        el.classList.add('word-score');
+        el.style = `top: ${yPos}px; left: ${xPos}px; opacity: ${opacity};`;
+
+        
+
+        lifeCycle();
+        
+        function lifeCycle(){
+            yPos -= 5;
+            opacity-=.04;
+            
+            el.innerHTML = `${word} +${score}`;
+            //el.style = `topX: ${yPos}px; left: ${xPos}px; `;
+            document.querySelector("#word-score-container").appendChild(el);
+            //el.classList.add("show");
+            if(yPos < window.screen.height/.7){
+                el.style = `top: ${yPos}px; left: ${xPos}px; opacity: ${opacity};`;
+            }
+
+            if(yPos < window.screen.height/2){
+                el.style = `top: ${yPos}px; left: ${xPos}px; opacity: ${opacity};`;
+            }
+
+            if(yPos < window.screen.height/4){
+                document.querySelector("#word-score-container").removeChild(el);
+            }else{
+                setTimeout(() => {
+                    requestAnimationFrame(lifeCycle);
+                }, 1000 / fps); 
+            }
+        }
+    }
+})();
