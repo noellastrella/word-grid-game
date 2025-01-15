@@ -2,73 +2,47 @@
 
 //-- VARIABLES ----------------------------------------------------------------------------
     let tiles = [];
-    let randomtimer = 100;
-    let minTimer = 100;
     let words = [];
     let wordsGuessed = [];
     let score = 0;
     let selectedLetters = [];
     let bonusTime = 0;
     let reset = false;
-    let currLVL = 1;
-    let bonusMultiplier = 100; 
-
+    let currLVL = 1; 
     let errorMsg = "";
 
-    let highScore = localStorage.getItem("highScore")?localStorage.getItem("highScore"):0;
-
+    const randomtimer = 100;
+    const minTimer = 100;
+    const bonusMultiplier = 100;
     const fps = 35;
     const tileCount = 25;
 
+    let highScore = localStorage.getItem("highScore")?localStorage.getItem("highScore"):0;
+
     const letters = [
-        {letter: "A", val: 1},
-        {letter: "B", val: 2},
-        {letter: "C", val: 3},
-        {letter: "D", val: 4},
-        {letter: "E", val: 1},
-        {letter: "F", val: 5},
-        {letter: "G", val: 5},
-        {letter: "H", val: 4},
-        {letter: "I", val: 1},
-        {letter: "J", val: 7},
-        {letter: "K", val: 8},
-        {letter: "L", val: 3},
-        {letter: "M", val: 3},
-        {letter: "N", val: 3},
-        {letter: "O", val: 1},
-        {letter: "P", val: 3},
-        {letter: "Q", val: 7},
-        {letter: "R", val: 2},
-        {letter: "S", val: 2},
-        {letter: "T", val: 2},
-        {letter: "U", val: 1},
-        {letter: "V", val: 5},
-        {letter: "W", val: 5},
-        {letter: "X", val: 7},
-        {letter: "Y", val: 8},
-        {letter: "Z", val: 10},
+        //main set of letters
+        {letter: "A", val: 1}, {letter: "B", val: 2}, {letter: "C", val: 3},
+        {letter: "D", val: 4}, {letter: "E", val: 1}, {letter: "F", val: 5},
+        {letter: "G", val: 5}, {letter: "H", val: 4}, {letter: "I", val: 1},
+        
+        {letter: "J", val: 7}, {letter: "K", val: 8}, {letter: "L", val: 3},
+        {letter: "M", val: 3}, {letter: "N", val: 3}, {letter: "O", val: 1},
+        {letter: "P", val: 3}, {letter: "Q", val: 7}, {letter: "R", val: 2},
+        
+        {letter: "S", val: 2}, {letter: "T", val: 2}, {letter: "U", val: 1},
+        {letter: "V", val: 5}, {letter: "W", val: 5}, {letter: "X", val: 7},
+        {letter: "Y", val: 8}, {letter: "Z", val: 10},
+
         //extra letters
-        {letter: "B", val: 2},
-        {letter: "C", val: 3},
-        {letter: "D", val: 4},
-        {letter: "L", val: 3},
-        {letter: "M", val: 3},
-        {letter: "N", val: 3},
-        {letter: "P", val: 3},
-        {letter: "R", val: 2},
-        {letter: "S", val: 2},
+        {letter: "B", val: 2},  {letter: "C", val: 3},  {letter: "D", val: 4},
+        {letter: "L", val: 3},  {letter: "M", val: 3},  {letter: "N", val: 3},
+        {letter: "P", val: 3},  {letter: "R", val: 2},  {letter: "S", val: 2},
         {letter: "T", val: 2},
 
         //extra vowels
-        {letter: "A", val: 1},
-        {letter: "E", val: 1},
-        {letter: "I", val: 1},
-        {letter: "O", val: 1},
-        {letter: "U", val: 1},
-        {letter: "A", val: 1},
-        {letter: "E", val: 1},
-        {letter: "I", val: 1},
-        {letter: "O", val: 1},
+        {letter: "A", val: 1}, {letter: "E", val: 1}, {letter: "I", val: 1},
+        {letter: "O", val: 1}, {letter: "U", val: 1}, {letter: "A", val: 1},
+        {letter: "E", val: 1}, {letter: "I", val: 1}, {letter: "O", val: 1},
         {letter: "U", val: 1}
     ]
 
@@ -125,14 +99,15 @@ function gameOver(){
 //-- RESET STATE ----------------------------------------------------------------------------
 
     function resetState(e){
-        
         reset = true;
+        
         wordsGuessed = [];
-        score = 0;
         selectedLetters = [];
-        bonusTime = 0;
         tiles = [];
 
+        score = 0;
+        bonusTime = 0;
+        
         document.querySelector("#game-over").classList.add("hidden");
         document.querySelector("#game-grid").innerHTML = ""
         init();
@@ -141,7 +116,6 @@ function gameOver(){
 //-- RENDER ----------------------------------------------------------------------------
 
     function render(){
-
         let count = tiles.reduce((acc,curr)=>{
             let expireTime = curr.dataset["timer"];
             let timeRemaining = expireTime - Date.now()
@@ -218,13 +192,10 @@ function gameOver(){
         document.querySelector("#word").innerHTML= wordTemp;
         document.querySelector("#score").innerHTML= score;
         document.querySelector("#hi-score").innerHTML= highScore;
-
         document.querySelector("#lvl").innerHTML= currLVL;
         document.querySelector("#lvl2").innerHTML= currLVL;
-
         document.querySelector("#score2").innerHTML= score;
         document.querySelector("#hi-score2").innerHTML= highScore;
-
         document.querySelector("#error").innerHTML = errorMsg;
 
         checkUpcoming();
@@ -336,8 +307,6 @@ function gameOver(){
         let lvlModifier = currLVL * 1.1;
 
         let timer = Date.now()+((Math.random()*(randomtimer / lvlModifier))+ (minTimer / lvlModifier) + (o.val*2))*1000;
-
-        //console.log("timer, lvlModifier:",(timer-Date.now()), lvlModifier)
 
         el.setAttribute('data-letter', o.letter);
         el.setAttribute('data-score', o.val);
