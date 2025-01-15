@@ -265,20 +265,25 @@ button{
     @media only screen and (min-width:300px){ 
         width: 90%;
         font-size: .62em;
-        padding: .9em;
-      }
-  
-      @media only screen and (min-width:1025px){ 
+        padding: .1em;
+    }
+
+    @media only screen and (min-width:1025px){ 
         width: 37%;
         font-size: .95em;
-        padding: .9em;
-      }
-      
+        padding: .1em;
+    }
+    
     margin: 1em auto;
     overflow: hidden;
     position: relative;
     height: 8em;
-    border-radius: 1em;
+
+    h2{
+        padding: 0;
+        margin: 0;
+        text-align: center;
+    }
 
     span{
         font-size: 1.5em;
@@ -291,13 +296,20 @@ button{
         font-size: 1em;
         padding: 0;
         width: 100%;
-        height: 1em;
+        height: 100%;
         position: relative;
         -webkit-transition: all 1s;
         transition: all 1s;
+
+        border-radius: 1em;
+        border: 2px double black;
+        margin: 0;
+        
+        
         
         li{
-            font-size: 2em;
+            user-select: none;
+            font-size: 1.75em;
             color: black;
             width: 1em;
             border-radius: 2em;
@@ -305,12 +317,13 @@ button{
             transition: all 1s;
             list-style: none;
             display: inline;
-            border: 5px inset #333;
-            padding: .8em;
+            border: 5px inset #000;
+            padding: .7em;
             position: absolute;
             background-color: #FFF;
             opacity: .5;
             left: 0em;
+            top: .5em;
         }
     }   
 }
@@ -320,6 +333,6 @@ button{
     color: #FFF;
     text-align: left;
     font-size: 2em;
-    height: 100%;
+    height: 40vh;
     overflow: scroll;
 }

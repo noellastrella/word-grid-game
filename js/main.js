@@ -205,7 +205,7 @@ function gameOver(){
 
     function checkUpcoming(){
         upComingLetters = [...upComingLetters].map((e,i)=>{  
-            let posX = (i * 5) + 1
+            let posX = (i * 5) + .5
             e.el.setAttribute("style", `left: ${posX}em`)
             return e
         })        
@@ -214,13 +214,27 @@ function gameOver(){
     function addUpcoming(i){
         let letterObj =  JSON.parse(JSON.stringify(letters[Math.floor(Math.random()*letters.length)]))
 
+        letterObj.id = `letter${letterObj.letter}${Math.floor(Math.random()*100000 * i)}`;
         letterObj.el =  document.createElement("li");
-        letterObj.el.setAttribute("id",  `letter${letterObj.letter}${Math.floor(Math.random()*100000 * i)}`)
+        letterObj.el.setAttribute("id",  letterObj.id)
         letterObj.el.classList.add("upcomingLetter")
         letterObj.el.innerText = letterObj.letter;
+        letterObj.el.setAttribute("data-num", i);
 
-        upComingLetters.push(letterObj)
+        upComingLetters.push(letterObj);
+
         document.querySelector("#upcoming").appendChild(letterObj.el);
+
+        letterObj.el.addEventListener("click", (e)=>{
+            //remove upcoming - game dynamic
+            document.querySelector("#upcoming").removeChild(e.target);
+            
+            upComingLetters = upComingLetters.reduce((acc,next)=>{    
+                return letterObj.id != next.id ? [...acc, next] : acc;
+            }, []);
+            addUpcoming(i);
+            updateState();
+        })
     }
 
 //-- CLEAR LETTERS ----------------------------------------------------------------------------
