@@ -1,13 +1,15 @@
 html{
     font-size: 12px;
+    //font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: 700;
     background-color: #333;
-    color:#FFF
+    color:#000
 }
 
 main{
     text-align: center;
+    background-color: #ffffcd;
 }
 
 #error{
@@ -20,7 +22,6 @@ main{
     pointer-events: none;
     opacity: .1;
     transform: perspective(500px) translate3d(0px, 0, -100px);
-    
 }
 
 #game-grid{
@@ -39,15 +40,13 @@ main{
 
     width: 40%;
     max-width: 800px;
-    border: 0px  black inset;
+    border: 0px  rgb(11, 11, 11) inset;
     
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     
     justify-content: space-around; 
-
-
 }
 
 #score-container{
@@ -80,6 +79,7 @@ main{
     padding: .25em 0px;
     border-bottom: #000 1px solid;   
     margin: 0px;
+    color: #000;
 }
 
 .tile-container .tile{
@@ -101,7 +101,7 @@ main{
 }
 
 .tile{
-    border: .2em inset white;
+    border: .2em solid rgb(7, 7, 7);
     
     overflow: hidden;
     padding: 0px;
@@ -175,7 +175,6 @@ button{
     }
 
     &#reset{
-
         background-color: #F00;
         color: #FFF;
 
@@ -216,7 +215,6 @@ button{
     position: absolute;
     height: 100%;
     width: 100%;
-    
     
     top: 0;
     text-align: center;
@@ -295,15 +293,15 @@ button{
     #upcoming {
         font-size: 1em;
         padding: 0;
-        width: 100%;
-        height: 100%;
+        //width: 100%;
+        height: 5.2em;
         position: relative;
-        -webkit-transition: all 1s;
-        transition: all 1s;
+        overflow: hidden;
 
         border-radius: 1em;
-        border: 2px double black;
-        margin: 0;
+        //border: 2px solid black;
+        background-color: rgb(255, 127, 72);
+        margin: 1em;
         
         li{
             user-select: none;
@@ -316,12 +314,12 @@ button{
             list-style: none;
             display: inline;
             border: 5px inset #000;
-            padding: .7em;
+            padding: .4em;
             position: absolute;
             background-color: rgb(59, 133, 190);
             
             left: 0em;
-            top: .5em;
+            top: .25em;
 
             &:active{
                 transition: all .1s;
@@ -366,8 +364,7 @@ button{
     transition: all 1s ease;
     -webkit-transition: all 1s ease;
     opacity: .4;
-    border-radius: 1em;
-    
+    border-radius: 1em;    
 
     &.show{
         opacity: 1;
