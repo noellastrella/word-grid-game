@@ -6,13 +6,12 @@
     let wordsGuessed = [];
     let score = 0;
     let selectedLetters = [];
-    let bonusTime = 0;
     let reset = false;
     let currLVL = 1; 
     let errorMsg = "";
 
-    const randomtimer = 130;
-    const minTimer = 130;
+    const randomtimer = 100;
+    const minTimer = 100;
     const bonusMultiplier = 100;
     const fps = 35;  //affects render 
     const tileCount = 25;
@@ -44,7 +43,10 @@
         {letter: "A", val: 1}, {letter: "E", val: 1}, {letter: "I", val: 1},
         {letter: "O", val: 1}, {letter: "U", val: 1}, {letter: "A", val: 1},
         {letter: "E", val: 1}, {letter: "I", val: 1}, {letter: "O", val: 1},
-        {letter: "U", val: 1}
+        {letter: "U", val: 1},
+
+        //★ ✪ 💣 ⏰
+        {letter: "⏰", val: 0}, {letter: "💣", val: 0}, //{letter: "x2", val: 0},
     ]
 
     let upComingLetters =[];
@@ -74,12 +76,7 @@
 //-- INIT ----------------------------------------------------------------------------
 
     function init(){
-        for(let i=0; i<tileCount; i++){
-            tiles.push(createTile());
-            populateTile(tiles[i], letters[Math.floor(Math.random()*letters.length)])
-            document.querySelector("#game-grid").appendChild (tiles[i]);
-            tiles[i].addEventListener("click", addLetter);
-        }
+        populateTiles();
 
         document.querySelector("#clear").addEventListener("click", clearLetters)
         document.querySelector("#submit").addEventListener('click', checkWord)
@@ -91,6 +88,18 @@
         checkUpcoming();
         render();
     }
+//-- POPULATE TILES -------------------------------------------------------------------------
+
+function populateTiles(){
+    document.querySelector("#game-grid").innerHTML = "";
+    for(let i=0; i<tileCount; i++){
+        tiles.push(createTile());
+        populateTile(tiles[i], letters[Math.floor(Math.random()*letters.length)])
+        document.querySelector("#game-grid").appendChild (tiles[i]);
+        tiles[i].addEventListener("click", addLetter);
+    }
+}
+
 //-- GAME OVER ------------------------------------------------------------------------------
 
 function gameOver(){
@@ -113,12 +122,21 @@ function gameOver(){
         document.querySelector("#game-grid").innerHTML = ""
         init();
     }
+//-- ADD BONUS ----------------------------------------------------------------------------
+
+    function addBonus(bonus){
+        tiles.forEach((e)=>{
+            e.dataset["timer"] = Number(e.dataset["timer"]) + bonus;
+        });
+    }
 
 //-- RENDER ----------------------------------------------------------------------------
 
     function render(){
+        
         let count = tiles.reduce((acc,curr)=>{
-            let expireTime = curr.dataset["timer"];
+            
+            let expireTime = Number(curr.dataset["timer"]);
             let timeRemaining = expireTime - Date.now()
             let setTime = curr.dataset["time"];
             let col = "0F0";
@@ -126,9 +144,12 @@ function gameOver(){
 
             if(timeRemaining>0){
                 let x = timeRemaining/setTime;
+
+                x = x > 1 ? 1 : x;
+
                 col = `hsl(${(140*(x/1.5))}, 100%, 50%)`;
                 curr.dataset["remaining"] = timeRemaining;
-                tile.style = `background: linear-gradient(to bottom,  #FFF ${100-(timeRemaining/setTime)*100}%,  ${col} 1%,  ${col} 100%);  `;
+                tile.style = `background: linear-gradient(to bottom,  #FFF ${100-(x)*100}%,  ${col} 1%,  ${col} 100%);  `;
                 curr.dataset["x"] = x;
                 acc.push(curr);
             }else{
@@ -145,6 +166,7 @@ function gameOver(){
                 if(count.length >0){
                     requestAnimationFrame(render);
                 }else{
+                    alert(reset, count);
                     gameOver();
                 }
             }else{
@@ -167,10 +189,41 @@ function gameOver(){
         errorMsg = "";
     }
 
+//-- DISPLAY BOMB ----------------------------------------------------------------------------
+
+    function displayBonus(e){
+        document.querySelector("#bomb-container").classList.remove("hide");
+        
+        if(e=="💣"){
+            document.querySelector("#bomb-container").innerHTML = e;
+
+            setTimeout(() => {
+                document.querySelector("#bomb-container").innerHTML = "💥";
+                populateTiles();
+            }, 200); 
+
+        }else if(e=="⏰"){
+            document.querySelector("#bomb-container").innerHTML = e;
+            document.querySelector("#bomb-container").classList.add("shake");
+
+            addBonus(1000);
+        }
+
+        setTimeout(() => {
+            document.querySelector("#bomb-container").classList.add("hide");
+            document.querySelector("#bomb-container").classList.add("shake");
+        }, 500); 
+    }
+
 //-- ADD LETTER ----------------------------------------------------------------------------
     
     function addLetter(el){
-        if(!el.target.classList.contains("tile-selected")){
+        let icon = el.target.dataset.letter;
+
+        if(icon === "💣" || icon === "⏰"){
+            displayBonus(icon);
+
+        }else if(!el.target.classList.contains("tile-selected")){
             el.target.classList.add("tile-selected");
             selectedLetters.push(el);
         }else{
@@ -204,7 +257,7 @@ function gameOver(){
 
     function checkUpcoming(){
         upComingLetters = [...upComingLetters].map((e,i)=>{  
-            let posX = (i * 5) + .5
+            let posX = (i * 4) + .5
             e.el.setAttribute("style", `left: ${posX}em`)
             return e
         })        
@@ -253,18 +306,12 @@ function gameOver(){
         let currScore = 0;
 
         if(words.includes(wordTemp)){
-
-            tiles.reduce((acc,curr)=>{
-                curr.dataset["timer"] = Number(curr.dataset["timer"])  + bonusTime;
-                return acc;
-            })
-            bonusTime = 0;
-
             selectedLetters.forEach((e,i)=>{
                 let letterTemp = upComingLetters.shift();
 
                 currScore += Number(e.target.dataset["score"]);
 
+                addBonus(currScore * (bonusMultiplier / ( 1 + (currLVL * bonusDegradationRate))))
                 addUpcoming(i);
                 populateTile(e.target,letterTemp);
 
@@ -279,10 +326,8 @@ function gameOver(){
                 localStorage.setItem("highScore", score);
                 highScore = score;
             }
-                       
-            bonusTime = score * (bonusMultiplier / ( 1 + (currLVL * bonusDegradationRate)));
             
-            createPointTile(wordTemp, currScore)
+            createPointTile(wordTemp, currScore);
             wordsGuessed.push({"word":wordTemp, "score" : currScore});
             selectedLetters = [];
         }else{
@@ -343,8 +388,6 @@ function gameOver(){
 
         el.classList.add('word-score');
         el.style = `top: ${yPos}px; left: ${xPos}px; opacity: ${opacity};`;
-
-        
 
         lifeCycle();
         
